@@ -1,15 +1,15 @@
 import { fork, take, cancel } from 'redux-saga/effects';
 
+
 // Use require.context to require sagas automatically
 // Ref: https://webpack.github.io/docs/context.html
-const context = require.context('./', false, /\.js$/);
-const keys = context.keys().filter(item => item !== './index.js');
+const context = require.context('./', false, /\.ts$/);
+const keys = context.keys().filter((item: string) => item !== './index.ts');
 
 function* root() {
   for (let key of keys) {
-    console.log(context(key))
     for (let item of Object.values(context(key))){
-      yield fork(item)
+      yield fork(<any>item)
     }
   }
 }
@@ -17,7 +17,7 @@ function* root() {
 
 const CANCEL_SAGAS_HMR = 'CANCEL_SAGAS_HMR';
 
-function createAbortableSaga (saga) {
+function createAbortableSaga (saga: any) {
   if (process.env.NODE_ENV === 'development') {
     return function* main () {
       const sagaTask = yield fork(saga);
@@ -30,10 +30,10 @@ function createAbortableSaga (saga) {
 }
 
 const SagaManager = {
-  startSagas(sagaMiddleware) {
+  startSagas(sagaMiddleware: any) {
     sagaMiddleware.run(createAbortableSaga(root))
   },
-  cancelSagas(store) {
+  cancelSagas(store: any) {
     store.dispatch({
       type: CANCEL_SAGAS_HMR
     });

@@ -1,7 +1,10 @@
-export const createReducer = (initialState, reducers, namespace)=>{
-  return (state = initialState, action ) => {
-    // console.log('reducers ___>>',reducers, action)
-    let type = '';
+type Action = {
+  type: string;
+  [propName: string]: any
+}
+export const createReducer = (initialState: object, reducers: Object, namespace: string) => {
+  return (state = initialState, action: Action ): object => {
+    let type: string = '';
     let str = action.type.split('/');
     if (str.length > 1){
       if (str[0] !== namespace){
@@ -16,7 +19,7 @@ export const createReducer = (initialState, reducers, namespace)=>{
 
     const reducerFunc = reducers[type];
     if (!reducerFunc){
-      //ignore, not to update
+      // ignore, not to update
       return state
     }
 
