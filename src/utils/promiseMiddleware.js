@@ -12,7 +12,7 @@ const promiseMiddleware = (store)=> (next) => (action) => {
       if (result){
         return next({type, result, ...rest})
       } else {
-        return next({type, result: {error: 'no data returns'}, ...rest})
+        return next({type, error: 'no data returns', ...rest})
       }
     })
   }
@@ -27,7 +27,6 @@ const promiseMiddleware = (store)=> (next) => (action) => {
       if (result.error){
         return next({type: ERROR, error: result.error, ...rest})
       }
-      console.log('promise middleware->', result)
       return next({type: SUCCESS, result, ...rest})
 
     }, error => {
